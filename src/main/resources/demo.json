@@ -1,5 +1,5 @@
 {
-  "namespace": "com.mailshine.springboot.kafka.avro.model",
+  "namespace": "com.kafka.avro.model",
   "type": "record",
   "name": "Student",
   "fields": [
