@@ -50,5 +50,9 @@ public class ProducerService {
         }
     }
 
+    public void sendMessageToPartition(Student message , int partition) {
+        log.info("Sent message=[{}]", message);
+        kafkaTemplate.send(topicName, partition , null, message);
+    }
 
 }
