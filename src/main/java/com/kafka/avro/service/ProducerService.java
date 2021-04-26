@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
+import java.util.concurrent.ExecutionException;
+
 @Service
 @Slf4j
 public class ProducerService {
@@ -20,7 +22,7 @@ public class ProducerService {
     @Autowired
     private KafkaTemplate<String, Student> kafkaTemplate;
 
-    public void sendMessage(Student message) {
+    public void sendMessageAsync(Student message) {
         ListenableFuture<SendResult<String, Student>> future = kafkaTemplate.send(topicName, message);
         future.addCallback(
                 new ListenableFutureCallback<SendResult<String, Student>>() {
@@ -36,4 +38,17 @@ public class ProducerService {
                     }
                 });
     }
+
+    public void sendMessageSync(Student message) {
+        log.info("Sent message=[{}]", message);
+        try {
+            kafkaTemplate.send(topicName, message).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
